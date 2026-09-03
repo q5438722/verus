@@ -345,7 +345,7 @@ pub const fn trim_ascii_end<'a>(slice: &'a [u8]) -> (ret: &'a [u8])
             assert(rest@ =~= old_bytes.subrange(0, split as int));
             assert(tail@ =~= old_bytes.subrange(split as int, old_len));
             assert(tail@.len() == 1);
-            assert(tail@[0] == old_bytes[(old_len - 1) as int]);
+            assert(tail@[0] == old_bytes[old_len - 1]);
             assert(old_bytes == source.subrange(0, old_len as int));
             vstd::seq::lemma_seq_subrange_composition(
                 source,
@@ -361,24 +361,24 @@ pub const fn trim_ascii_end<'a>(slice: &'a [u8]) -> (ret: &'a [u8])
                 old_len - 1,
             );
             assert(rest@ == source.subrange(0, old_len - 1));
-            assert(old_bytes[(old_len - 1) as int] == source[(old_len - 1) as int]);
+            assert(old_bytes[old_len - 1] == source[old_len - 1]);
             vstd::seq::lemma_seq_subrange_len(old_bytes, 0, old_len - 1);
             assert(rest@.len() == old_len - 1);
         }
         let last = &tail[0];
         proof {
             assert(*last == tail@[0]);
-            assert(*last == source[(old_len - 1) as int]);
+            assert(*last == source[old_len - 1]);
         }
         if byte_is_ascii_whitespace(*last) {
             proof {
-                assert(ascii_is_whitespace(source[(old_len - 1) as int]));
+                assert(ascii_is_whitespace(source[old_len - 1]));
                 assert forall|j: int| #![auto]
                     j >= rest@.len() && source.len() > j
                     implies ascii_is_whitespace(source[j]) by {
                     if j < old_len {
                         assert(j == old_len - 1);
-                        assert(ascii_is_whitespace(source[(old_len - 1) as int]));
+                        assert(ascii_is_whitespace(source[old_len - 1]));
                     } else {
                         assert(j >= old_len);
                     }
@@ -387,7 +387,7 @@ pub const fn trim_ascii_end<'a>(slice: &'a [u8]) -> (ret: &'a [u8])
             bytes = rest;
         } else {
             proof {
-                assert(!ascii_is_whitespace(source[(old_len - 1) as int]));
+                assert(!ascii_is_whitespace(source[old_len - 1]));
                 assert(bytes@.len() > 0);
                 assert(!ascii_is_whitespace(source[(bytes@.len() as int) - 1]));
             }

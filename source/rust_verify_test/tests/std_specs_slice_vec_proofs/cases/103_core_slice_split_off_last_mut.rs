@@ -17,8 +17,8 @@ pub open spec fn slice_split_off_last_result<T>(
     value: T,
 ) -> bool {
     source.len() != 0
-        && value == source[(source.len() - 1) as int]
-        && remaining == source.subrange(0, (source.len() - 1) as int)
+        && value == source[source.len() - 1]
+        && remaining == source.subrange(0, source.len() - 1)
 }
 
 pub const fn split_off_last_mut<'a, T>(slice_ref: &mut &'a mut [T]) -> (ret: Option<&'a mut T>)
@@ -52,14 +52,14 @@ pub const fn split_off_last_mut<'a, T>(slice_ref: &mut &'a mut [T]) -> (ret: Opt
             assert(rem@ =~= replaced.subrange(0, split as int));
             assert(tail@ =~= replaced.subrange(split as int, replaced.len() as int));
             assert(tail@.len() == 1);
-            assert(tail@[0] == replaced[(replaced.len() - 1) as int]);
+            assert(tail@[0] == replaced[replaced.len() - 1]);
             assert(replaced == source);
         }
         let ghost remaining = rem@;
         let last = &mut tail[0];
         proof {
-            assert(*last == source[(source.len() - 1) as int]);
-            assert(remaining == source.subrange(0, (source.len() - 1) as int));
+            assert(*last == source[source.len() - 1]);
+            assert(remaining == source.subrange(0, source.len() - 1));
         }
         *slice_ref = rem;
         proof {

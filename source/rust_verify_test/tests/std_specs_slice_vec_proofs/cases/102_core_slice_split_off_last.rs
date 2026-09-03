@@ -16,16 +16,16 @@ pub open spec fn slice_split_off_last_result<T>(
     value: T,
 ) -> bool {
     source.len() != 0
-        && value == source[(source.len() - 1) as int]
-        && remaining == source.subrange(0, (source.len() - 1) as int)
+        && value == source[source.len() - 1]
+        && remaining == source.subrange(0, source.len() - 1)
 }
 
 pub const fn split_last<'a, T>(slice: &'a [T]) -> (ret: Option<(&'a T, &'a [T])>)
     ensures
         slice@.len() == 0 ==> ret.is_none(),
         slice@.len() != 0 ==> ret.is_some()
-            && *ret.unwrap().0 == slice@[(slice@.len() - 1) as int]
-            && ret.unwrap().1@ == slice@.subrange(0, (slice@.len() - 1) as int),
+            && *ret.unwrap().0 == slice@[slice@.len() - 1]
+            && ret.unwrap().1@ == slice@.subrange(0, slice@.len() - 1),
 {
     if slice.len() != 0 {
         let split = slice.len() - 1;
@@ -36,7 +36,7 @@ pub const fn split_last<'a, T>(slice: &'a [T]) -> (ret: Option<(&'a T, &'a [T])>
             assert(init@ =~= slice@.subrange(0, split as int));
             assert(tail@ =~= slice@.subrange(split as int, slice@.len() as int));
             assert(tail@.len() == 1);
-            assert(tail@[0] == slice@[(slice@.len() - 1) as int]);
+            assert(tail@[0] == slice@[slice@.len() - 1]);
         }
         let last = &tail[0];
         proof {
@@ -72,8 +72,8 @@ pub const fn split_off_last<'a, T>(slice_ref: &mut &'a [T]) -> (ret: Option<&'a 
         Some((last, rem)) => {
             proof {
                 assert(source.len() != 0);
-                assert(*last == source[(source.len() - 1) as int]);
-                assert(rem@ == source.subrange(0, (source.len() - 1) as int));
+                assert(*last == source[source.len() - 1]);
+                assert(rem@ == source.subrange(0, source.len() - 1));
             }
             *slice_ref = rem;
             proof {

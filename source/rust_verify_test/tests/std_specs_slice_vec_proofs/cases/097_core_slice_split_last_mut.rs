@@ -14,8 +14,8 @@ pub const fn split_last_mut<'a, T>(slice: &'a mut [T]) -> (ret: Option<(&'a mut 
     ensures
         old(slice)@.len() == 0 ==> ret.is_none() && final(slice)@ == old(slice)@,
         old(slice)@.len() != 0 ==> ret.is_some()
-            && *ret.unwrap().0 == old(slice)@[(old(slice)@.len() - 1) as int]
-            && ret.unwrap().1@ == old(slice)@.subrange(0, (old(slice)@.len() - 1) as int)
+            && *ret.unwrap().0 == old(slice)@[old(slice)@.len() - 1]
+            && ret.unwrap().1@ == old(slice)@.subrange(0, old(slice)@.len() - 1)
             && final(slice)@ == final(ret.unwrap().1)@ + seq![*final(ret.unwrap().0)],
 {
     if slice.len() != 0 {
@@ -28,7 +28,7 @@ pub const fn split_last_mut<'a, T>(slice: &'a mut [T]) -> (ret: Option<(&'a mut 
             assert(init@ =~= source.subrange(0, split as int));
             assert(tail@ =~= source.subrange(split as int, source.len() as int));
             assert(tail@.len() == 1);
-            assert(tail@[0] == source[(source.len() - 1) as int]);
+            assert(tail@[0] == source[source.len() - 1]);
         }
         let last = &mut tail[0];
         Some((last, init))

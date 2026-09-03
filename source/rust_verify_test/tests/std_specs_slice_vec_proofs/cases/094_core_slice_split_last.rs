@@ -14,8 +14,8 @@ pub const fn split_last<'a, T>(slice: &'a [T]) -> (ret: Option<(&'a T, &'a [T])>
     ensures
         slice@.len() == 0 ==> ret.is_none(),
         slice@.len() != 0 ==> ret.is_some()
-            && *ret.unwrap().0 == slice@[(slice@.len() - 1) as int]
-            && ret.unwrap().1@ == slice@.subrange(0, (slice@.len() - 1) as int),
+            && *ret.unwrap().0 == slice@[slice@.len() - 1]
+            && ret.unwrap().1@ == slice@.subrange(0, slice@.len() - 1),
 {
     if slice.len() != 0 {
         let split = slice.len() - 1;
@@ -26,7 +26,7 @@ pub const fn split_last<'a, T>(slice: &'a [T]) -> (ret: Option<(&'a T, &'a [T])>
             assert(init@ =~= slice@.subrange(0, split as int));
             assert(tail@ =~= slice@.subrange(split as int, slice@.len() as int));
             assert(tail@.len() == 1);
-            assert(tail@[0] == slice@[(slice@.len() - 1) as int]);
+            assert(tail@[0] == slice@[slice@.len() - 1]);
         }
         let last = &tail[0];
         proof {
