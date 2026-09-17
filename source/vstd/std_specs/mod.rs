@@ -29,9 +29,12 @@ pub mod range;
 pub mod result;
 
 pub mod slice;
+mod slice_extra;
 
 #[cfg(feature = "alloc")]
 pub mod vec;
+#[cfg(feature = "alloc")]
+mod vec_extra;
 
 #[cfg(feature = "alloc")]
 pub mod vecdeque;

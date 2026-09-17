@@ -268,8 +268,8 @@ pub open spec fn spec_slice_starts_with<T: PartialEq>(slice: &[T], needle: &[T])
     &&& forall|i: int| #![auto]
         0 <= i < needle@.len() ==>
             <T as super::cmp::PartialEqSpec<T>>::eq_spec(
-                &slice@[i],
                 &needle@[i],
+                &slice@[i],
             )
 }
 
@@ -280,10 +280,17 @@ pub assume_specification<T: PartialEq>[ <[T]>::starts_with ](
 ) -> (result: bool)
     ensures
         needle@.len() > slice@.len() ==> !result,
-        <T as super::cmp::PartialEqSpec<T>>::obeys_eq_spec() ==> (result == spec_slice_starts_with(
-            slice,
-            needle,
-        )),
+        <T as super::cmp::PartialEqSpec<T>>::obeys_eq_spec() ==> (
+            result <==> {
+                &&& needle@.len() <= slice@.len()
+                &&& forall|i: int| #![auto]
+                    0 <= i < needle@.len() ==>
+                        <T as super::cmp::PartialEqSpec<T>>::eq_spec(
+                            &needle@[i],
+                            &slice@[i],
+                        )
+            }
+        ),
 ;
 
 // ends_with
@@ -292,8 +299,8 @@ pub open spec fn spec_slice_ends_with<T: PartialEq>(slice: &[T], needle: &[T]) -
     &&& forall|i: int| #![auto]
         0 <= i < needle@.len() ==>
             <T as super::cmp::PartialEqSpec<T>>::eq_spec(
-                &slice@[slice@.len() - needle@.len() + i],
                 &needle@[i],
+                &slice@[slice@.len() - needle@.len() + i],
             )
 }
 
@@ -304,10 +311,17 @@ pub assume_specification<T: PartialEq>[ <[T]>::ends_with ](
 ) -> (result: bool)
     ensures
         needle@.len() > slice@.len() ==> !result,
-        <T as super::cmp::PartialEqSpec<T>>::obeys_eq_spec() ==> (result == spec_slice_ends_with(
-            slice,
-            needle,
-        )),
+        <T as super::cmp::PartialEqSpec<T>>::obeys_eq_spec() ==> (
+            result <==> {
+                &&& needle@.len() <= slice@.len()
+                &&& forall|i: int| #![auto]
+                    0 <= i < needle@.len() ==>
+                        <T as super::cmp::PartialEqSpec<T>>::eq_spec(
+                            &needle@[i],
+                            &slice@[slice@.len() - needle@.len() + i],
+                        )
+            }
+        ),
 ;
 
 impl<T, I: SliceIndex<[T]>> super::core::IndexSpecImpl<I> for [T] {
