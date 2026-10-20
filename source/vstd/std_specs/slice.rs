@@ -12,6 +12,11 @@ use core::ops::{
 };
 use core::slice::{Chunks, Iter, IterMut, SliceIndex};
 
+pub mod arrays;
+pub mod ascii;
+pub mod chunk_by;
+pub mod windows;
+
 use verus as verus_skip_verusfmt;
 verus_skip_verusfmt! {
 

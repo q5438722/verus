@@ -14,6 +14,8 @@ use core::option::Option;
 use core::option::Option::None;
 use core::slice::SliceIndex;
 
+pub mod partial_eq;
+
 use verus as verus_skip_verusfmt;
 verus_skip_verusfmt! {
 
